@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello rest-client!</string>
+    <string name="app_name">rest-client</string>
+    <string name="mapKey">0m3r1vPwBx13Am1vCZ7BTO_ytDh3KqIdphFRRIA</string>
+    <string name="search_hint">Enter an address here!</string>
+    <string name="menu_search">Search</string>
+</resources>
