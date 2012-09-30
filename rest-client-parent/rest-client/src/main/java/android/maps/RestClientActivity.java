@@ -14,6 +14,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class RestClientActivity extends MapActivity {
 	private MapView mapView;
@@ -24,7 +25,7 @@ public class RestClientActivity extends MapActivity {
 		getMenuInflater().inflate(R.menu.options_menu, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
@@ -35,14 +36,14 @@ public class RestClientActivity extends MapActivity {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		mapView = (MapView) this.findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
-		((RestClientApplication)getApplication()).setRestClientActivity(this);
+		((RestClientApplication) getApplication()).setRestClientActivity(this);
 		mapView.getOverlays().add(new ClickOverlay());
 	}
 
@@ -53,7 +54,19 @@ public class RestClientActivity extends MapActivity {
 
 	public void setDestination(GeoPoint geoPoint) {
 		mapView.getController().setCenter(geoPoint);
-		mapView.getOverlays().add(new )
+		showMarkerAt(geoPoint);
+	}
+
+	private void showMarkerAt(GeoPoint geoPoint) {
+		if (mapView.getOverlays().size() > 1) {
+			mapView.getOverlays().remove(1);
+		}
+		OverlayItem item = new OverlayItem(geoPoint, "Destination",
+				"Cliquez pour lancer la navigation");
+		AddressItemizedOverlay addressOverlay = new AddressItemizedOverlay(
+				this, getResources().getDrawable(R.drawable.marker_red));
+		addressOverlay.addOverlay(item);
+		mapView.getOverlays().add(addressOverlay);
 	}
 
 	private class ClickOverlay extends Overlay {
@@ -70,14 +83,14 @@ public class RestClientActivity extends MapActivity {
 							adresses.get(0).toString(), Toast.LENGTH_LONG)
 							.show();
 				} else {
-					Toast.makeText(RestClientActivity.this,
-							"No address found", Toast.LENGTH_LONG).show();
+					Toast.makeText(RestClientActivity.this, "No address found",
+							Toast.LENGTH_LONG).show();
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			showMarkerAt(p);
 			return super.onTap(p, mapView);
 		}
 	}
