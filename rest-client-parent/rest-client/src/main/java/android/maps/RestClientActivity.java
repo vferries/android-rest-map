@@ -76,13 +76,21 @@ public class RestClientActivity extends MapActivity {
 			double latitude = (double) p.getLatitudeE6() / (double) 1e6;
 			double longitude = (double) p.getLongitudeE6() / (double) 1e6;
 			try {
-				List<Address> adresses = geoCoder.getFromLocation(latitude,
+				List<Address> addresses = geoCoder.getFromLocation(latitude,
 						longitude, 1);
-				if (adresses.size() > 0) {
-					Toast.makeText(RestClientActivity.this,
-							adresses.get(0).toString(), Toast.LENGTH_LONG)
-							.show();
+				if (addresses.size() > 0) {
+					Address address = addresses.get(0);
+					String displayedName = "";
+					int i = 0;
+					String line;
+					while ((line = address.getAddressLine(i)) != null) {
+						displayedName += line + "\n";
+						i++;
+					}
+					Toast.makeText(RestClientActivity.this, displayedName,
+							Toast.LENGTH_LONG).show();
 				} else {
+
 					Toast.makeText(RestClientActivity.this, "No address found",
 							Toast.LENGTH_LONG).show();
 				}
